@@ -1,0 +1,157 @@
+#include <iostream>
+#include <string>
+#include <limits>
+using namespace std;
+
+// Acciones posibles
+enum Accion { norte, sur, este, oeste, ver, tomar, usar, invalida };
+
+// Lugares posibles
+enum Lugar { ventana, escritorio, cama, armario };
+
+int main() {
+    Lugar lugarActual = ventana;
+    bool continuar = true;
+    bool numeroVentanaVisto = false;
+    bool numeroMicroscopioVisto = false;
+    bool notaTomada = false;
+
+    string strAccion;
+    Accion accion;
+    int op = 0;
+
+    cout << "=== Controles del juego ===" << endl;
+    cout << "n = norte | s = sur | e = este | o = oeste" << endl;
+    cout << "v = ver   | t = tomar | q = salir" << endl;
+    cout << "===========================\n";
+
+    cout << "\nPresiona 1 para jugar, 0 para salir: ";
+    cin >> op;
+
+    if (op == 0) {
+        cout << "Gracias por jugar.\n";
+        return 0;
+    }
+
+    // Introducción
+    cout << "\n--- Historia ---" << endl;
+    cout << "Una princesa debe escapar de una torre en la que está encerrada." << endl;
+    cout << "Tendrá que buscar los elementos necesarios para poder escapar.\n";
+    cout << "Es de noche. Frente al ventanal observa el bosque que rodea el lugar," << endl;
+    cout << "mientras escucha el viento que sopla entre los árboles." << endl;
+    cout << "Sabe que debe escapar y decide explorar la habitación...\n";
+
+    // Bucle principal del juego
+    while (continuar) {
+        cout << "\nEstás en: ";
+        switch (lugarActual) {
+            case ventana:
+                cout << "una ventana con barrotes.\n";
+                cout << "Podés:\n";
+                cout << "- Ir al norte (escritorio)\n";
+                cout << "- Ir al oeste (cama)\n";
+                cout << "- Ir al este (armario)\n";
+                cout << "- Ver por la ventana\n";
+                break;
+
+            case escritorio:
+                cout << "un escritorio antiguo con un microscopio.\n";
+                cout << "Podés:\n";
+                cout << "- Ir al sur (ventana)\n";
+                cout << "- Ir al este (armario)\n";
+                cout << "- Ir al oeste (cama)\n";
+                cout << "- Ver por el microscopio\n";
+                cout << "- Tomar una nota escondida\n";
+                break;
+
+            // Lugares aún no implementados
+            case cama:
+                cout << "una cama vieja. (próximamente...)\n";
+                break;
+            case armario:
+                cout << "un armario antiguo. (próximamente...)\n";
+                break;
+        }
+
+        // Pedir acción
+        cout << "\n¿Qué querés hacer? (n/s/e/o/v/t/q): ";
+        cin >> strAccion;
+
+        // Traducir a acción
+        if (strAccion == "n") accion = norte;
+        else if (strAccion == "s") accion = sur;
+        else if (strAccion == "e") accion = este;
+        else if (strAccion == "o") accion = oeste;
+        else if (strAccion == "v") accion = ver;
+        else if (strAccion == "t") accion = tomar;
+        else if (strAccion == "q") {
+            continuar = false;
+            break;
+        } else accion = invalida;
+
+        // Procesar acción
+        cout << "\n--- Resultado de la acción ---\n";
+
+        switch (lugarActual) {
+            case ventana:
+                if (accion == norte) {
+                    lugarActual = escritorio;
+                    cout << "Caminás hacia el escritorio.\n";
+                } else if (accion == oeste) {
+                    lugarActual = cama;
+                    cout << "Te agachás y te acercás a la cama...\n"; // por programar
+                } else if (accion == este) {
+                    lugarActual = armario;
+                    cout << "Te acercás al armario...\n"; // por programar
+                } else if (accion == ver) {
+                    if (!numeroVentanaVisto) {
+                        cout << "Ves el bosque... y tallado en el marco un número: 7\n";
+                        numeroVentanaVisto = true;
+                    } else {
+                        cout << "Ya viste el número 7 en la ventana.\n";
+                    }
+                } else {
+                    cout << "Esa acción no tiene sentido aquí.\n";
+                }
+                break;
+
+            case escritorio:
+                if (accion == sur) {
+                    lugarActual = ventana;
+                    cout << "Volvés a la ventana.\n";
+                } else if (accion == este) {
+                    lugarActual = armario;
+                    cout << "Te acercás al armario...\n"; // por programar
+                } else if (accion == oeste) {
+                    lugarActual = cama;
+                    cout << "Vas hacia la cama...\n"; // por programar
+                } else if (accion == ver) {
+                    if (!numeroMicroscopioVisto) {
+                        cout << "Mirá por el microscopio y ves el número 3 grabado en la lente.\n";
+                        numeroMicroscopioVisto = true;
+                    } else {
+                        cout << "Ya viste el número 3 en el microscopio.\n";
+                    }
+                } else if (accion == tomar) {
+                    if (!notaTomada) {
+                        cout << "Tomás una nota que estaba debajo del microscopio.\n";
+                        notaTomada = true;
+                    } else {
+                        cout << "Ya tomaste la nota.\n";
+                    }
+                } else {
+                    cout << "Esa acción no tiene sentido aquí.\n";
+                }
+                break;
+        }
+
+        // Pausa
+        cout << "\nPresioná ENTER para continuar...";
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin.get();
+    }
+
+    cout << "\nGracias por jugar.\n";
+    return 0;
+}
+
