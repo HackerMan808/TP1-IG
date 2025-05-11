@@ -1,1 +1,202 @@
+#include <iostream>
+#include <string>
+#include <unistd.h> // Para sleep()
+
+using namespace std;
+
+enum acciones {
+    norte,  // subir
+    sur,    // bajar
+    este,
+    oeste,
+    ver,
+    tomar,
+    usar
+};
+
+int main() {
+    bool continuar = true;
+    int opcionMenu = 0;
+
+    while (continuar) {
+        cout << "\n********* ESCAPE DE LA TORRE *********" << endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░╬░░░░░░░░░░░░░░░░░░░░░┼░░░░░░░░░░░░░░░░░░┼░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░┼░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░▄░░░░░░░░░░░░┼░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▄░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░┼░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░┼░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│▒▒▒░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░┼░░░░░░░░░░┼░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░┼░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░═══░░═══░│═══░░░░░░░░┼░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░┼░░░░░░░║░║──║░║──║░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░┼░░░░░░░░░░░░░░░░░░░░░░░░░░░║░░░░░░░░░░░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░┼░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░╬░░░░░░░░░░░░░░░░░░░░░║░█░░░█░░░█░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░┼░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░║░█░░░█░░░█░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░╬░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░┼░░░░░░░░░░░░░║░░░░░░░░░░░║░░░░░░░░░░░░░░░┼░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░╬░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░║░░░░░░░░░░░░░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░┼░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░║░█░░█░░░█░░█░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░▄░░░░░░░░░░░░░░░░░░║░░░░░░░░░░░░░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░┼░░░░░░░░░░░░░░░░░░░░░░░║░░█░░░█░░░█░░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░║░░░░░░░░░░░░░░░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░┼░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░║░█░░░░░█░░░░░█░║░░░░░░░┼░░░░░░░░░░░░░░┼░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░║░█░░░░░█░░░░░█░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░║░█░░░░░█░░░░░█░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░║░░░░░░░░░░░░░░░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▄░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░┼░░░░░░░░░░░║░░█░░░░░░░░░█░░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░║░░░░░█████░░░░░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░┼░░░░░░░░░░░░░░░░░░░░░░░░░░░░║║░░░░███████░░░░║║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░║░░░░░███████░░░░░║░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░┼░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░───────────────────░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+        cout << "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<< endl;
+ << endl;
+        cout << "1. Jugar" << endl;
+        cout << "0. Salir" << endl;
+        cout << "Selecciona una opción: ";
+        cin >> opcionMenu;
+
+        if (opcionMenu == 0) {
+            continuar = false;
+        } else if (opcionMenu == 1) {
+            bool jugando = true;
+            int piso = 5;
+            bool tieneLlave = false;
+            bool llaveVista = false;
+            bool puertaAbierta = false;
+            string strAccion;
+            int accion = -1;
+            float suerte = 0.0;
+
+            while (jugando) {
+                cout << "\n----- Piso " << piso << " -----" << endl;
+
+                // Describir el piso actual
+                switch (piso) {
+                    case 5:
+                        cout << "Estás en la cima de la torre. Hay una escalera hacia abajo.\n";
+                        break;
+                    case 4:
+                        cout << "Una puerta bloquea el paso. Parece que necesita una llave.\n";
+                        if (!tieneLlave && !llaveVista)
+                            cout << "Podrías buscar algo útil por aquí...\n";
+                        break;
+                    case 3:
+                        cout << "Un lobo hambriento está en este piso.\n";
+                        break;
+                    case 2:
+                        cout << "Ves placas sospechosas en el suelo. Podría ser una trampa.\n";
+                        break;
+                    case 1:
+                        cout << "¡La puerta de salida está aquí!\n";
+                        break;
+                }
+
+                cout << "\nAcciones disponibles: [n] Subir | [s] Bajar | [v] Ver | [t] Tomar | [u] Usar" << endl;
+                cout << "Ingresa acción: ";
+                cin >> strAccion;
+
+                // Determinar acción
+                if (strAccion == "n" || strAccion == "N") accion = norte;
+                else if (strAccion == "s" || strAccion == "S") accion = sur;
+                else if (strAccion == "e" || strAccion == "E") accion = este;
+                else if (strAccion == "o" || strAccion == "O") accion = oeste;
+                else if (strAccion == "v" || strAccion == "V") accion = ver;
+                else if (strAccion == "t" || strAccion == "T") accion = tomar;
+                else if (strAccion == "u" || strAccion == "U") accion = usar;
+                else {
+                    cout << "Comando no reconocido. Intenta de nuevo.\n";
+                    continue;
+                }
+
+                // Procesar acción según el piso
+                switch (accion) {
+                    case norte: // subir
+                        if (piso < 5) {
+                            piso++;
+                        } else {
+                            cout << "No puedes subir más.\n";
+                        }
+                        break;
+                    case sur: // bajar
+                        if (piso == 4 && !puertaAbierta) {
+                            cout << "La puerta está cerrada. Debes usar la llave primero.\n";
+                        } else if (piso > 1) {
+                            piso--;
+                        } else {
+                            cout << "No puedes bajar más.\n";
+                        }
+                        break;
+                    case ver:
+                        cout << "Observas detenidamente el entorno...\n";
+                        if (piso == 4 && !tieneLlave && !llaveVista) {
+                            cout << "¡Ves una llave vieja brillando entre las piedras!\n";
+                            llaveVista = true;
+                        } else if (piso == 3) {
+                            cout << "El lobo parece distraído...\n";
+                        } else {
+                            cout << "No notas nada inusual.\n";
+                        }
+                        break;
+                    case tomar:
+                        if (piso == 4 && llaveVista && !tieneLlave) {
+                            cout << "Tomas cuidadosamente la llave.\n";
+                            tieneLlave = true;
+                        } else if (piso == 4 && !llaveVista) {
+                            cout << "¿Tomar qué? No ves nada útil.\n";
+                        } else {
+                            cout << "No hay nada que tomar aquí.\n";
+                        }
+                        break;
+                    case usar:
+                        if (piso == 4 && tieneLlave && !puertaAbierta) {
+                            cout << "Usas la llave para abrir la puerta. Ahora puedes bajar.\n";
+                            puertaAbierta = true;
+                        } else if (piso == 3 && tieneLlave) {
+                            cout << "Lanzas la llave para distraer al lobo. Aprovechas para bajar rápidamente.\n";
+                            tieneLlave = false;
+                            piso--;
+                        } else if (piso == 1) {
+                            cout << "¡Empujas la puerta con todas tus fuerzas!\n";
+                            cout << "¡La princesa escapa y ve la luz del día!\n";
+                            cout << "¡FELICIDADES, GANASTE!\n";
+                            jugando = false;
+                        } else {
+                            cout << "No puedes usar nada aquí.\n";
+                        }
+                        break;
+                    default:
+                        cout << "Acción no válida.\n";
+                        break;
+                }
+
+                // Trampa en piso 2
+                if (piso == 2) {
+                    cout << "¡Piso peligroso! ¿Saltar o correr? ";
+                    string decision;
+                    cin >> decision;
+
+                    suerte = 0.0;
+                    for (int i = 0; i < 3; i++) {
+                        suerte += 0.3;
+                    }
+
+                    if (decision == "saltar" && suerte >= 0.6) {
+                        cout << "¡Saltaste justo a tiempo!\n";
+                    } else {
+                        cout << "¡Caíste en la trampa! Has perdido.\n";
+                        jugando = false;
+                    }
+                }
+            }
+
+            cout << "\nFin del juego. Regresando al menú principal...\n";
+            sleep(2);
+        } else {
+            cout << "Opción no válida.\n";
+        }
+    }
+
+    cout << "Gracias por jugar. ¡Hasta pronto!\n";
+    return 0;
+}
 
